@@ -12,10 +12,10 @@ R = [   cos(targetpoint(3)) sin(targetpoint(3));
 
 done = 0;
 step = 0;
-    while done == 0
+    for i = 1:20000
 
-        direction = targetpoint - ROBPAR.pos;
-        theta = - direction(3);
+        direction = ROBPAR.pos - targetpoint;
+        theta = direction(3);
 
         %Tranformation
         d = R*(-direction(1:2)');
@@ -23,7 +23,7 @@ step = 0;
         dx = d(1);
         dy = d(2);
         
-        alpha = -theta + atan2(dx, dy);
+        alpha = -theta + atan2(dy, dx);
         beta = -theta-alpha;
         rho = sqrt(dx^2+dy^2);
 
@@ -31,18 +31,24 @@ step = 0;
 
         omega = k(2)*alpha+k(3)*beta;
         
-        r = ROBPAR.par(2);
-        l = ROBPAR.par(1);
-        A = (r/2)*[1 1;
-                    1/l 1/l];
-                
-        ang_velo = inv(A)*[velo;omega];
+        if(omega ~= 0)
+            Radius = velo/omega;
+            v1 = omega*(Radius - ROBPAR.par(1)/2);
+            v2 = omega*(Radius + ROBPAR.par(1)/2);
+        elseif(omega == 0)
+            v1 = velo;
+            v2 = velo;
+        end
+        
+        ang_velo1 = v1/ROBPAR.par(2);
+        ang_velo2 = v2/ROBPAR.par(3);
             
-        ROBPAR.pos = kinupdate(ROBPAR.pos, ROBPAR.par, Ts, [ang_velo(1),ang_velo(2)]);
+        ROBPAR.pos = kinupdate(ROBPAR.pos, ROBPAR.par, Ts, [ang_velo1,ang_velo2]);
         update();
         step = step+1;
-        if (rho < 0.01 && beta < 0.02) || step > 100000
-            done = 1;
+        if (rho < 0.01 && beta < 0.02)
+            disp('Home run')
+            return;
         end
     end
 end
