@@ -13,7 +13,6 @@ function show_trace()
         m = max(max(abs(scale)));
         xlim(scale(1,:)+[-0.05,0.05]*m);
         ylim(scale(2,:)+[-0.05,0.05]*m);
-        max(abs(scale))
         x = [-0.01, 0.01, 0.01, -0.01,-0.01]*m*2;
         y = [-0.01, -0.01, 0.01, 0.01,-0.01]*m*2;
         plot(x+ROBPAR.pos(1), y+ROBPAR.pos(2), 'r-', 'LineWidth', 3);
