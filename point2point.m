@@ -11,9 +11,9 @@ function point2point(pose, vel_fwd, vel_turn)
     % negative angle of target pose 
     beta = -ROBPAR.pos(3) - alpha 
    
-    turn(alpha,vel_turn);
-    
-    forward(rho,vel_fwd);
-    turn(targetpose(3) + beta,vel_turn);
+    %% Execution:
+    turn(alpha,vel_turn); % turn towards point
+    forward(rho,vel_fwd); % drive to point
+    turn(targetpose(3) + beta,vel_turn); % turn to target theta
     
 end
