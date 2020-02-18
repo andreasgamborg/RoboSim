@@ -21,8 +21,6 @@ ROBPAR.trace.velo = [0];
 
 %%
 
-for n = 1:6
-forward(0.7,0.2*n)
-turn(4/5*pi,0.1)
-end
+
+kincon([0.5,0.5,-pi])
 show_trace();
