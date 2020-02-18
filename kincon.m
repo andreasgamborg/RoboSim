@@ -1,6 +1,6 @@
-function kincon(inputpose)
+function kincon(targetpoint)
 global Ts ROBPAR
-targetpoint = ROBPAR.pos + inputpose;
+
 if length(targetpoint) ~= 3
     warning("Taget point must be a coordinate (x,y,theta)");
 end
