@@ -1,16 +1,15 @@
 function kincon(inputpose)
 global Ts ROBPAR
-targetpose = inputpose + ROBPAR.pos;
-if length(targetpose) ~= 3
-    warning("Taget point must be a coordinate (x,y,theta)");
-end
-
-k = [0.3,0.8,-0.15]; % k_rho k_alpha k_beta Use these to tune the controller
-R = [   cos(targetpose(3)) sin(targetpose(3));
-    -sin(targetpose(3)) cos(targetpose(3))
-    ];
-
-    for n = 1:10000
+    targetpose = inputpose + ROBPAR.pos;
+    R = [   cos(targetpose(3)) sin(targetpose(3));
+        -sin(targetpose(3)) cos(targetpose(3))
+        ];
+    %% Tuning
+    k = [0.3,0.8,-0.15]; % k_rho k_alpha k_beta Use these to tune the controller
+    max_error = [0.01, 0.02]; % distance and angle to target pose
+    max_time = 120; % seconds
+    %%
+    for n = 1:(max_time/Ts)
 
         direction = targetpose - ROBPAR.pos;
         theta = -direction(3);
@@ -35,8 +34,9 @@ R = [   cos(targetpose(3)) sin(targetpose(3));
         ROBPAR.pos = kinupdate(ROBPAR.pos, ROBPAR.par, Ts, [ang_velo1,ang_velo2]);
         update();
 
-        if abs(rho) < 0.01 && abs(beta) < 0.02
-
+        if abs(rho) < max_error(1) && abs(beta) < max_error(2)
+            disp("Reached distination (x,y,theta)")
+            disp(ROBPAR.pos)
             return;
         end
     end

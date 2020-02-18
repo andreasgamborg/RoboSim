@@ -18,16 +18,5 @@ ROBPAR = robinit(wheel_dist, wheel_r_left, wheel_r_right, start_position);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 %% Show trace of robot
 show_trace();
