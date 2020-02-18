@@ -24,13 +24,10 @@ R = [   cos(targetpose(3)) sin(targetpose(3));
         beta = -theta-alpha;
         rho = sqrt(dx^2+dy^2);
         
-        alpha = wrapToPi(alpha)
+        alpha = wrapToPi(alpha);
                 
         velo = k(1)*rho;
         omega = k(2)*alpha+k(3)*beta;
-        
-        params = [params;
-                  n alpha beta rho omega];
         
         ang_velo1 = (velo - (ROBPAR.par(1)*omega)/2)/ROBPAR.par(2);
         ang_velo2 = (velo + (ROBPAR.par(1)*omega)/2)/ROBPAR.par(3);
@@ -43,13 +40,5 @@ R = [   cos(targetpose(3)) sin(targetpose(3));
             return;
         end
     end
-    figure(11)
-    hold on
-    plot(params(:,1),params(:,2))
-    plot(params(:,1),params(:,3))
-    plot(params(:,1),params(:,4))
-    plot(params(:,1),params(:,5))
-    hold off
-    legend(["alpha";"beta";"rho";"omega"])
     warning("Did not reach distination")
 end
