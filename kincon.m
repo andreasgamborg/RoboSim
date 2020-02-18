@@ -1,18 +1,18 @@
-function kincon(targetpoint)
+function kincon(inputpose)
 global Ts ROBPAR
-
-if length(targetpoint) ~= 3
+targetpose = inputpose + ROBPAR.pos;
+if length(targetpose) ~= 3
     warning("Taget point must be a coordinate (x,y,theta)");
 end
 
 k = [0.3,0.8,-0.15]; % Use these to tune the controller
-R = [   cos(targetpoint(3)) sin(targetpoint(3));
-    -sin(targetpoint(3)) cos(targetpoint(3))
+R = [   cos(targetpose(3)) sin(targetpose(3));
+    -sin(targetpose(3)) cos(targetpose(3))
     ];
 
     for n = 1:10000
 
-        direction = targetpoint - ROBPAR.pos;
+        direction = targetpose - ROBPAR.pos;
         theta = -direction(3);
 
         %Transformation
