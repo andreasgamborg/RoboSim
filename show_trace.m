@@ -1,5 +1,10 @@
 function show_trace()
 global ROBPAR
+[N,M] = size(ROBPAR.trace.pos);
+if N < 2
+    error("Not enongh points in trace.pos");
+    return;
+end
 
 figure('Renderer', 'painters', 'Position', [10 10 600 600])
     plot(ROBPAR.trace.pos(:,1),ROBPAR.trace.pos(:,2),"b--")
