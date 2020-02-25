@@ -1,6 +1,11 @@
 function carth = polar2carth(polar)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+% Converts the polar coordinates in polar
+% to carthesian coordinates x,y.
+% The output should be an array of the same size as pol containing
+% the carthesian coordinates.
+
+% polar: [theta,rho] // polar coordinates
+% carth: [x,y] // cartesian coordinates
 
     r = polar(2,:);
     theta = polar(1,:);
