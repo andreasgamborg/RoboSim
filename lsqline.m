@@ -22,11 +22,11 @@ function line = lsqline(points)
     r = mu_x*cos(alpha) + mu_y*sin(alpha);
     
     if r < 0
-        r = abs(r)
-        if alpha < 0
-            alpha = alpha + pi
+        r = abs(r);
+        if alpha <= 0
+            alpha = alpha + pi;
         else
-            alpha = alpha - pi
+            alpha = alpha - pi;
         end
     end
     
