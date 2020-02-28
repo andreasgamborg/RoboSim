@@ -19,11 +19,16 @@ function line = lsqline(points)
 
     alpha = atan2(num,den)/2;
         
-    r = abs(mu_x*cos(alpha) + mu_y*sin(alpha));
+    r = mu_x*cos(alpha) + mu_y*sin(alpha);
     
-    % Vinkel problemer
-    
-    alpha = wrapToPi(alpha);
+    if r < 0
+        r = abs(r)
+        if alpha < 0
+            alpha = alpha + pi
+        else
+            alpha = alpha - pi
+        end
+    end
     
     line = [alpha,r];
 
