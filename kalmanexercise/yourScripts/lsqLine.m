@@ -35,5 +35,3 @@ function line = lsqLine(points)
     line = [alpha,r];
 
 end
-
-end
