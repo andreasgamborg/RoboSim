@@ -13,9 +13,18 @@ function [ projectedLine, lineCov ] = projectToLaser( worldLine,poseIn, covIn)
 %% Constants
 global lsrRelPose % The laser scanner pose in the robot frame is read globally
 
+R = [cos(-poseIn(3)) sin(-poseIn(3)) 0;
+    -sin(-poseIn(3)) cos(-poseIn(3)) 0;
+    0 0 1];
+scanpose = poseIn + R*lsrRelPose';
 
 %% Calculation
-projectedLine = [0,0];
+aw = worldLine(1);
+
+al = aw - scanpose(3);
+rl = worldLine(2) - scanpose(1)*cos(aw) - scanpose(2)*sin(aw);
+
+projectedLine = [al,rl];
 
 lineCov = zeros(2,2);
 end
