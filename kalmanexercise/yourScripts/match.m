@@ -23,31 +23,25 @@ function [ matchResult ] = match( pose, poseCov, worldLines, laserLines )
     % The varAlpha and varR are the assumed variances of the parameters of
     % the extracted lines, they are read globally.
     global varAlpha varR
-    [~,N] = size(worldLines);
-    [~,M] = size(laserLines);
+    [~,NW] = size(worldLines);
+    [~,NL] = size(laserLines);
     
-    matchResult = [];
+    matchDist = 2;
+    matchResult = [worldLines; zeros(3,NW)];
     
-    for jj = 1:M
+    
+    for ii = 1:NW
+        [projLine, projCov] = projectToLaser(worldLines(:,ii), pose, poseCov);
+        INcov = projCov + [varAlpha 0; 0 varR];
         
-        laserLine = laserLines(:,jj);
-        
-        for ii = 1:N
-            [projLine, lineCov] = projectToLaser(worldLines(:,ii), pose, poseCov);
+        for jj = 1:NL
 
-            INcov = lineCov + [varAlpha 0; 0 varR];
-
-            innovation = laserLine-projLine';
-
-            gg = innovation'*inv(INcov)*innovation;
-
-            if 1
-                match = [worldLines(1,ii) worldLines(2,ii) innovation(1) innovation(2) jj];
-                matchResult = [matchResult match'];
+            innovation = laserLines(:,jj)-projLine;
+            mahalanobiDist = sqrt(innovation'/INcov*innovation);
+            
+            if mahalanobiDist <= matchDist
+                matchResult(3:5,ii) = [innovation(1); innovation(2); jj];
             end
         end  
-    end
-    if length(matchResult) == 0
-        matchResult=0;
     end
 end

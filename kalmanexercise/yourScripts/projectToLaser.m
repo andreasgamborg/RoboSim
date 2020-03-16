@@ -18,13 +18,15 @@ function [ projectedLine, lCov ] = projectToLaser( worldLine,poseIn, covIn)
         -sin(-poseIn(3)) cos(-poseIn(3)) 0;
         0 0 1];
     scanpose = poseIn + R*lsrRelPose';
-
+    % world
     aw = worldLine(1);
-
+    rw = worldLine(2);
+    % local to laser
     al = aw - scanpose(3);
-    rl = worldLine(2) - scanpose(1)*cos(aw) - scanpose(2)*sin(aw);
-
-    projectedLine = [al,rl];
-
-    lCov = lineCov(projectedLine, poseIn, covIn);
+    rl = rw - scanpose(1)*cos(aw) - scanpose(2)*sin(aw);
+    projectedLine = [al; rl];
+    
+    H = [0 0 -1; -cos(aw) -sin(aw) 0];
+    lCov = H*covIn*H';
+    
 end
