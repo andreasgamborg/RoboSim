@@ -10,5 +10,5 @@ function odoTargetPose = trans(transform,targetPose)
     odoTargetPose(3) = targetPose(3) + theta_T;
     
     R = [cos(theta_T) -sin(theta_T); sin(theta_T) cos(theta_T)];
-    odoTargetPose(1:2) = R*pose(1:2)+transform(1:2) ;
+    odoTargetPose(1:2) = R*targetPose(1:2)+transform(1:2) ;
 end

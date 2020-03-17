@@ -8,6 +8,6 @@ function T = findTransform(odoPose, pose)
     
     T(3) = odoPose(3) - pose(3);
         
-    R = [cos(theta_T) -sin(theta_T); sin(theta_T) cos(theta_T)];
+    R = [cos(T(3)) -sin(T(3)); sin(T(3)) cos(T(3))];
     T(1:2) = odoPose(1:2)-R*pose(1:2);
 end
