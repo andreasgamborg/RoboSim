@@ -32,24 +32,25 @@ function [ poseOut, poseCovOut ] = measurementUpdate( poseIn, poseCovIn, matchRe
     
     nm = nnz(matchResult(end,:));
     
+    R = diag(repmat([varAlpha varR],1,nm));
+    
+    H = [];
+    inn = [];
+        
     for i = 1:nl
         if(matchResult(end,i) ~= 0)
             
-            H = [0 0 -1; -cos(matchResult(1,i)) -sin(matchResult(1,i)) 0];
-             
-            Sigma_in = H*poseCovIn*H' + diag([varAlpha varR]);
-             
-            Kt = poseCovIn*H'*inv(Sigma_in);
-            
-            pose = pose + Kt*matchResult(3:4,i)/nm;
-            poseCov = poseCov - (Kt*Sigma_in*Kt')/nm;
-            
-            %break
+            H = [H;[0 0 -1; -cos(matchResult(1,i)) -sin(matchResult(1,i)) 0]];
+            inn = [inn;matchResult(3:4,i)];
             
         end
     end
+    
+    Sigma_in = H*poseCovIn*H' + R;
+        
+    Kt = poseCovIn*H'*inv(Sigma_in);
 
-    poseOut = pose;
-    poseCovOut = poseCov;
+    poseOut = pose + Kt*inn;
+    poseCovOut = poseCov - Kt*Sigma_in*Kt';
 
 end
