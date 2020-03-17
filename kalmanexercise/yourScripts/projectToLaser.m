@@ -22,7 +22,7 @@ function [ projectedLine, lCov ] = projectToLaser( worldLine,poseIn, covIn)
     aw = worldLine(1);
     rw = worldLine(2);
     % local to laser
-    al = aw - scanpose(3);
+    al = wrapToPi(aw - scanpose(3));
     rl = rw - scanpose(1)*cos(aw) - scanpose(2)*sin(aw);
     projectedLine = [al; rl];
     
