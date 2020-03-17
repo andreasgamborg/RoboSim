@@ -24,8 +24,32 @@ function [ poseOut, poseCovOut ] = measurementUpdate( poseIn, poseCovIn, matchRe
     % The varAlpha and varR are the assumed variances of the parameters of
     % the extracted lines, they are also read globally
     global lsrRelPose varAlpha varR
+    
+    nl = size(matchResult,2);
+    
+    pose = poseIn;
+    poseCov = poseCovIn;
+    
+    nm = nnz(matchResult(end,:));
+    
+    for i = 1:nl
+        if(matchResult(end,i) ~= 0)
+            
+            H = [0 0 -1; -cos(matchResult(1,i)) -sin(matchResult(1,i)) 0];
+             
+            Sigma_in = H*poseCovIn*H' + diag([varAlpha varR]);
+             
+            Kt = poseCovIn*H'*inv(Sigma_in);
+            
+            pose = pose + Kt*matchResult(3:4,i)/nm;
+            poseCov = poseCov - (Kt*Sigma_in*Kt')/nm;
+            
+            %break
+            
+        end
+    end
 
-    poseOut = poseIn;
-    poseCovOut = poseCovIn;
+    poseOut = pose;
+    poseCovOut = poseCov;
 
 end
