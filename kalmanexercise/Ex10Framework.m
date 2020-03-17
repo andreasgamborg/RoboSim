@@ -37,6 +37,7 @@ poses = zeros(3,noOfIter+1);
 poseCovs = cell(1,noOfIter+1);
 realPoses = zeros(3,noOfIter+1);
 odoPoses = zeros(3,noOfIter+1);
+currentWaypoint = 1;
 
 for iter = 1:noOfIter+1
     
